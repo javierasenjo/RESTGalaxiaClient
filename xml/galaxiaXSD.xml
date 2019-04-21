@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<Galaxia>
+    <nombre>Vía Lactea</nombre>
+    <Planetas>
+        <Planeta>
+            <nombre>Tierra</nombre>
+            <edad>4543</edad>
+            <radio>6371.0</radio>
+        </Planeta>
+        <Planeta>
+            <nombre>Marte</nombre>
+            <edad>4603</edad>
+            <radio>3390.0</radio>
+        </Planeta>
+        <Planeta>
+            <nombre>Jupiter</nombre>
+            <edad>4325</edad>
+            <radio>26543.35</radio>
+        </Planeta>
+    </Planetas>
+</Galaxia>

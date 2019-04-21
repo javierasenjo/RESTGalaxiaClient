@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE Galaxia SYSTEM "Galaxia.dtd">
+<Galaxia>
+    <nombre>Andromeda</nombre>
+    <Planetas>
+        <Planeta>
+            <nombre>c3po</nombre>
+            <edad>24</edad>
+            <ra2dio>235.0</ra2dio>
+        </Planeta>
+    </Planetas>
+</Galaxia>
