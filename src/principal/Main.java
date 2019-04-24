@@ -21,6 +21,11 @@ import java.util.Scanner;
  */
 public class Main {
 
+    String inputString, respuesta, respond;
+    static String nombrePlaneta;
+    static int edadPlaneta;
+    static double radioPlaneta;
+
     /**
      * @param args the command line arguments
      * @throws java.io.FileNotFoundException
@@ -34,19 +39,21 @@ public class Main {
             System.out.println("---------------------------");
             System.out.println("1. Crear galaxia");
             System.out.println("2. Obtener galaxia");
-            System.out.println("3. Obtener planeta");
-            System.out.println("4. Añadir planeta");
-            System.out.println("5. Mostrar galaxia");
-            System.out.println("6. Borrar planeta");
-            System.out.println("7. Validar XSD");
-            System.out.println("8. Salir");
+            System.out.println("3. Añadir planeta");
+            System.out.println("4. Obtener planeta");
+            System.out.println("5. Borrar planeta");
+            System.out.println("6. Modificar planeta");
+            System.out.println("7. Mostrar galaxia");
+            System.out.println("8. Devolver planetas");
+            System.out.println("9. Validar XSD");
+            System.out.println("10. Salir");
             System.out.println("---------------------------");
 
             Scanner sc = new Scanner(System.in);
             respuesta = sc.nextLine();
 
             ServiciosGalaxia serviciosGalaxia = new ServiciosGalaxia();
-            ServiciosValidador serviciosValidador= new ServiciosValidador();
+            ServiciosValidador serviciosValidador = new ServiciosValidador();
             try {
                 inputNum = Integer.parseInt(respuesta);
             } catch (Exception ex) {
@@ -78,13 +85,23 @@ public class Main {
                         System.out.println("No hay una galaxia creada");
                         break;
                     }
-                    List listaPlanetas = galaxia3.getPlanetas();
-                    if (listaPlanetas.isEmpty()) {
+                    Planeta planeta3 = crearPlaneta();
+                    respond = serviciosGalaxia.postPlaneta(planeta3);
+                    System.out.println(respond);
+                    break;
+                case 4:
+                    Galaxia galaxia4 = serviciosGalaxia.getGalaxia(Galaxia.class);
+                    if (galaxia4 == null) {
+                        System.out.println("No hay una galaxia creada");
+                        break;
+                    }
+                    List listaPlanetas4 = galaxia4.getPlanetas();
+                    if (listaPlanetas4.isEmpty()) {
                         System.out.println("No hay planetas en la galaxia");
                         break;
                     }
                     System.out.println("Estos son los planetas que tienes");
-                    respond = serviciosGalaxia.getPlanetas();
+                    respond = serviciosGalaxia.getPlanetasTexto();
                     System.out.println("Escribe el número del planeta");
                     System.out.println(respond);
                     respuesta = sc.nextLine();
@@ -95,45 +112,12 @@ public class Main {
                         break;
                     }
                     try {
-                        Planeta planeta = serviciosGalaxia.getPlaneta(Planeta.class, respuesta);
-                        System.out.println("Te han devuelto el planeta " + planeta.getNombre());
+                        Planeta planeta2 = serviciosGalaxia.getPlaneta(Planeta.class, respuesta);
+                        System.out.println("Te han devuelto el planeta " + planeta2.getNombre());
                     } catch (Exception ex) {
                         System.out.println("Planeta no encontrado");
                         break;
                     }
-                    break;
-                case 4:
-                    Galaxia galaxia4 = serviciosGalaxia.getGalaxia(Galaxia.class);
-                    if (galaxia4 == null) {
-                        System.out.println("No hay una galaxia creada");
-                        break;
-                    }
-                    String nombrePlaneta;
-                    int edadPlaneta;
-                    double radioPlaneta;
-
-                    System.out.println("¿Cómo se llama el planeta?");
-                    nombrePlaneta = sc.nextLine();
-                    System.out.println("¿Cuál es la edad del planeta?");
-                    try {
-                        edadPlaneta = Integer.parseInt(sc.nextLine());
-                    } catch (Exception ex) {
-                        System.out.println("Escribe un número");
-                        break;
-                    }
-                    System.out.println("¿Cuál es el radio del planeta?");
-                    try {
-                        radioPlaneta = Double.parseDouble(sc.nextLine());
-                    } catch (Exception ex) {
-                        System.out.println("Escribe un número");
-                        break;
-                    }
-                    Planeta planeta = new Planeta();
-                    planeta.setNombre(nombrePlaneta);
-                    planeta.setEdad(edadPlaneta);
-                    planeta.setRadio(radioPlaneta);
-                    respond = serviciosGalaxia.postPlaneta(planeta);
-                    System.out.println(respond);
                     break;
                 case 5:
                     Galaxia galaxia5 = serviciosGalaxia.getGalaxia(Galaxia.class);
@@ -141,23 +125,13 @@ public class Main {
                         System.out.println("No hay una galaxia creada");
                         break;
                     }
-                    respond = serviciosGalaxia.getPlanetas();
-                    System.out.println(respond);
-
-                    break;
-                case 6:
-                    Galaxia galaxia6 = serviciosGalaxia.getGalaxia(Galaxia.class);
-                    if (galaxia6 == null) {
-                        System.out.println("No hay una galaxia creada");
-                        break;
-                    }
-                    List listaPlanetas6 = galaxia6.getPlanetas();
-                    if (listaPlanetas6.isEmpty()) {
+                    List listaPlanetas5 = galaxia5.getPlanetas();
+                    if (listaPlanetas5.isEmpty()) {
                         System.out.println("No hay planetas en la galaxia");
                         break;
                     }
                     System.out.println("Estos son los planetas que tienes");
-                    respond = serviciosGalaxia.getPlanetas();
+                    respond = serviciosGalaxia.getPlanetasTexto();
                     System.out.println("Escribe el número del planeta");
                     System.out.println(respond);
                     respuesta = sc.nextLine();
@@ -175,7 +149,55 @@ public class Main {
                         break;
                     }
                     break;
+                case 6:
+                    Galaxia galaxia6 = serviciosGalaxia.getGalaxia(Galaxia.class);
+
+                    if (galaxia6 == null) {
+                        System.out.println("No hay una galaxia creada");
+                        break;
+                    }
+                    List listaPlanetas6 = galaxia6.getPlanetas();
+                    if (listaPlanetas6.isEmpty()) {
+                        System.out.println("No hay planetas en la galaxia");
+                        break;
+                    }
+                    System.out.println("Estos son los planetas que tienes");
+                    respond = serviciosGalaxia.getPlanetasTexto();
+                    System.out.println("Escribe el número del planeta que quieres cambiar");
+                    System.out.println(respond);
+                    respuesta = sc.nextLine();
+                    try {
+                        inputNum = Integer.parseInt(respuesta);
+                    } catch (Exception ex) {
+                        System.out.println("Escribeme un número anda");
+                        break;
+                    }
+
+                    try {
+                        Planeta planeta = crearPlaneta();
+                        respond = serviciosGalaxia.putPlaneta(planeta, respuesta);
+                        System.out.println(respond);
+                    } catch (Exception ex) {
+                        System.out.println("Planeta no encontrado");
+                        break;
+                    }
+                    break;
+
                 case 7:
+                    Galaxia galaxia7 = serviciosGalaxia.getGalaxia(Galaxia.class);
+                    if (galaxia7 == null) {
+                        System.out.println("No hay una galaxia creada");
+                        break;
+                    }
+                    respond = serviciosGalaxia.getPlanetasTexto();
+                    System.out.println(respond);
+
+                    break;
+                case 8:
+                    List<Planeta> listaPlanetas8 = serviciosGalaxia.getPlanetas(List.class);
+                    System.out.println(listaPlanetas8.toString());
+                    break;
+                case 9:
                     System.out.println("¿Qué fichero quieres comprobar? (sin .xml)");
                     System.out.println("Un ejemplo preparado es galaxiaXSD o planetaXSD");
                     System.out.println("También puedes probar un ejemplo no válido llamado galaxiaMal");
@@ -196,13 +218,36 @@ public class Main {
                         System.out.println("No existe ese fichero");
                     }
                     break;
-                case 8:
+                case 10:
                     salir = true;
                     break;
             }
 
         }
 
+    }
+
+    public static Planeta crearPlaneta() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("¿Cómo se llama el planeta?");
+        nombrePlaneta = sc.nextLine();
+        System.out.println("¿Cuál es la edad del planeta?");
+        try {
+            edadPlaneta = Integer.parseInt(sc.nextLine());
+        } catch (Exception ex) {
+            System.out.println("Escribe un número");
+        }
+        System.out.println("¿Cuál es el radio del planeta?");
+        try {
+            radioPlaneta = Double.parseDouble(sc.nextLine());
+        } catch (Exception ex) {
+            System.out.println("Escribe un número");
+        }
+        Planeta planeta = new Planeta();
+        planeta.setNombre(nombrePlaneta);
+        planeta.setEdad(edadPlaneta);
+        planeta.setRadio(radioPlaneta);
+        return planeta;
     }
 
 }
