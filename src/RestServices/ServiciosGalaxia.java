@@ -38,20 +38,20 @@ public class ServiciosGalaxia {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public String putPlaneta(Object requestEntity, String num) throws ClientErrorException {
-        return webTarget.path(java.text.MessageFormat.format("planeta/{0}", new Object[]{num})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), String.class);
+    public <T> T putPlaneta(Object requestEntity, Class<T> responseType, String numPlaneta) throws ClientErrorException {
+        return webTarget.path(java.text.MessageFormat.format("planeta/{0}", new Object[]{numPlaneta})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
     }
 
-    public String deletePlaneta(String num) throws ClientErrorException {
-        return webTarget.path(java.text.MessageFormat.format("planeta/{0}", new Object[]{num})).request().delete(String.class);
+    public <T> T deletePlaneta(Class<T> responseType, String numPlaneta) throws ClientErrorException {
+        return webTarget.path(java.text.MessageFormat.format("planeta/{0}", new Object[]{numPlaneta})).request().delete(responseType);
     }
 
-    public String postGalaxia(Object requestEntity) throws ClientErrorException {
-        return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), String.class);
+    public <T> T postGalaxia(Object requestEntity, Class<T> responseType) throws ClientErrorException {
+        return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
     }
 
-    public String postPlaneta(Object requestEntity) throws ClientErrorException {
-        return webTarget.path("planeta").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), String.class);
+    public <T> T postPlaneta(Object requestEntity, Class<T> responseType) throws ClientErrorException {
+        return webTarget.path("planeta").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
     }
 
     public String getPlanetasTexto() throws ClientErrorException {
@@ -65,9 +65,9 @@ public class ServiciosGalaxia {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T getPlaneta(Class<T> responseType, String num) throws ClientErrorException {
+    public <T> T getPlaneta(Class<T> responseType, String numPlaneta) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("planeta/{0}", new Object[]{num}));
+        resource = resource.path(java.text.MessageFormat.format("planeta/{0}", new Object[]{numPlaneta}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 

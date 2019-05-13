@@ -6,12 +6,17 @@
 package principal;
 
 import Pojo.Galaxia;
+import Pojo.ListaPlanetas;
 import Pojo.Planeta;
+import Pojo.Usuario;
 import RestServices.ServiciosGalaxia;
+import RestServices.ServiciosLogin;
 import RestServices.ServiciosValidador;
+import RestServices.ServiciosRegistrarse;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -36,24 +41,22 @@ public class Main {
         while (!salir) {
             int inputNum = 0;
             String inputString, respuesta, respond;
-            System.out.println("---------------------------");
-            System.out.println("1. Crear galaxia");
-            System.out.println("2. Obtener galaxia");
-            System.out.println("3. Añadir planeta");
-            System.out.println("4. Obtener planeta");
-            System.out.println("5. Borrar planeta");
-            System.out.println("6. Modificar planeta");
-            System.out.println("7. Mostrar galaxia");
-            System.out.println("8. Devolver planetas");
-            System.out.println("9. Validar XSD");
-            System.out.println("10. Salir");
-            System.out.println("---------------------------");
+            System.out.println("---------------------------------------------------");
+            System.out.println("1. Registrarse      --------  2. Iniciar Sesión");
+            System.out.println("3. Crear galaxia    --------  8. Modificar planeta");
+            System.out.println("4. Obtener galaxia  --------  9. Mostrar galaxia");
+            System.out.println("5. Añadir planeta   --------  10. Devolver planetas");
+            System.out.println("6. Obtener planeta  --------  11. Validar XSD");
+            System.out.println("7. Borrar planeta   --------  12. Salir");
+            System.out.println("---------------------------------------------------");
 
             Scanner sc = new Scanner(System.in);
             respuesta = sc.nextLine();
 
             ServiciosGalaxia serviciosGalaxia = new ServiciosGalaxia();
             ServiciosValidador serviciosValidador = new ServiciosValidador();
+            ServiciosRegistrarse serviciosRegistrarse = new ServiciosRegistrarse();
+            ServiciosLogin serviciosLogin = new ServiciosLogin();
             try {
                 inputNum = Integer.parseInt(respuesta);
             } catch (Exception ex) {
@@ -62,41 +65,64 @@ public class Main {
 
             switch (inputNum) {
                 case 1:
+                    System.out.println("Escribe el nombre de usuario");
+                    String nombre = sc.nextLine();
+                    System.out.println("Escribe el la contraseña");
+                    String contraseña = sc.nextLine();
+                    Usuario usuario = new Usuario();
+                    usuario.setNombre(nombre);
+                    usuario.setPassword(contraseña);
+                    respond = serviciosRegistrarse.signup(usuario);
+                    System.out.println(respond);
+                    break;
+                case 2:
+                    System.out.println("Escribe el nombre de usuario");
+                    String nombre2 = sc.nextLine();
+                    System.out.println("Escribe el la contraseña");
+                    String contraseña2 = sc.nextLine();
+                    Usuario usuario2 = new Usuario();
+                    usuario2.setNombre(nombre2);
+                    usuario2.setPassword(contraseña2);
+                    respond = serviciosLogin.loginear(usuario2);
+                    System.out.println("Tu token es " + respond);
+                    break;
+                case 3:
                     String nombreGalaxia = null;
 
                     System.out.println("Escribe el nombre de la galaxia");
                     nombreGalaxia = sc.nextLine();
                     Galaxia galaxia = new Galaxia();
+                    Galaxia galaxiaNueva = new Galaxia();
                     galaxia.setNombre(nombreGalaxia);
-                    respuesta = serviciosGalaxia.postGalaxia(galaxia);
+                    galaxiaNueva = serviciosGalaxia.postGalaxia(galaxia, Galaxia.class);
                     System.out.println(respuesta);
-                    break;
-                case 2:
-                    Galaxia galaxia2 = serviciosGalaxia.getGalaxia(Galaxia.class);
-                    if (galaxia2 == null) {
-                        System.out.println("No hay ninguna galaxia");
-                    } else {
-                        System.out.println("Te han devuelto la galaxia: " + galaxia2.getNombre());
-                    }
-                    break;
-                case 3:
-                    Galaxia galaxia3 = serviciosGalaxia.getGalaxia(Galaxia.class);
-                    if (galaxia3 == null) {
-                        System.out.println("No hay una galaxia creada");
-                        break;
-                    }
-                    Planeta planeta3 = crearPlaneta();
-                    respond = serviciosGalaxia.postPlaneta(planeta3);
-                    System.out.println(respond);
                     break;
                 case 4:
                     Galaxia galaxia4 = serviciosGalaxia.getGalaxia(Galaxia.class);
                     if (galaxia4 == null) {
+                        System.out.println("No hay ninguna galaxia");
+                    } else {
+                        System.out.println("Te han devuelto la galaxia: " + galaxia4.getNombre());
+                    }
+                    break;
+                case 5:
+                    Galaxia galaxia5 = serviciosGalaxia.getGalaxia(Galaxia.class);
+                    if (galaxia5 == null) {
                         System.out.println("No hay una galaxia creada");
                         break;
                     }
-                    List listaPlanetas4 = galaxia4.getPlanetas();
-                    if (listaPlanetas4.isEmpty()) {
+                    Planeta planeta5 = crearPlaneta();
+                    Planeta planetaNuevo = serviciosGalaxia.postPlaneta(planeta5, Planeta.class);
+                    System.out.println(planetaNuevo);
+                    break;
+                case 6:
+                    Galaxia galaxia6 = serviciosGalaxia.getGalaxia(Galaxia.class);
+                    if (galaxia6 == null) {
+                        System.out.println("No hay una galaxia creada");
+                        break;
+                    }
+                    List listaPlanetas6 = galaxia6.getPlanetas();
+                    if (listaPlanetas6.isEmpty()) {
                         System.out.println("No hay planetas en la galaxia");
                         break;
                     }
@@ -119,14 +145,14 @@ public class Main {
                         break;
                     }
                     break;
-                case 5:
-                    Galaxia galaxia5 = serviciosGalaxia.getGalaxia(Galaxia.class);
-                    if (galaxia5 == null) {
+                case 7:
+                    Galaxia galaxia7 = serviciosGalaxia.getGalaxia(Galaxia.class);
+                    if (galaxia7 == null) {
                         System.out.println("No hay una galaxia creada");
                         break;
                     }
-                    List listaPlanetas5 = galaxia5.getPlanetas();
-                    if (listaPlanetas5.isEmpty()) {
+                    ArrayList<Planeta> listaPlanetas7 = (ArrayList<Planeta>) galaxia7.getPlanetas();
+                    if (listaPlanetas7.isEmpty()) {
                         System.out.println("No hay planetas en la galaxia");
                         break;
                     }
@@ -142,22 +168,22 @@ public class Main {
                         break;
                     }
                     try {
-                        String respuestaBorrar = serviciosGalaxia.deletePlaneta(respuesta);
-                        System.out.println(respuestaBorrar);
+                       Galaxia GalaxiaNueva7 = serviciosGalaxia.deletePlaneta(Galaxia.class,respuesta);
+                        System.out.println(GalaxiaNueva7);
                     } catch (Exception ex) {
                         System.out.println("Planeta no encontrado");
                         break;
                     }
                     break;
-                case 6:
-                    Galaxia galaxia6 = serviciosGalaxia.getGalaxia(Galaxia.class);
+                case 8:
+                    Galaxia galaxia8 = serviciosGalaxia.getGalaxia(Galaxia.class);
 
-                    if (galaxia6 == null) {
+                    if (galaxia8 == null) {
                         System.out.println("No hay una galaxia creada");
                         break;
                     }
-                    List listaPlanetas6 = galaxia6.getPlanetas();
-                    if (listaPlanetas6.isEmpty()) {
+                    List listaPlanetas8 = galaxia8.getPlanetas();
+                    if (listaPlanetas8.isEmpty()) {
                         System.out.println("No hay planetas en la galaxia");
                         break;
                     }
@@ -175,7 +201,7 @@ public class Main {
 
                     try {
                         Planeta planeta = crearPlaneta();
-                        respond = serviciosGalaxia.putPlaneta(planeta, respuesta);
+                        Planeta planetaNuevo8 = serviciosGalaxia.putPlaneta(planeta,Planeta.class, respuesta);
                         System.out.println(respond);
                     } catch (Exception ex) {
                         System.out.println("Planeta no encontrado");
@@ -183,9 +209,9 @@ public class Main {
                     }
                     break;
 
-                case 7:
-                    Galaxia galaxia7 = serviciosGalaxia.getGalaxia(Galaxia.class);
-                    if (galaxia7 == null) {
+                case 9:
+                    Galaxia galaxia9 = serviciosGalaxia.getGalaxia(Galaxia.class);
+                    if (galaxia9 == null) {
                         System.out.println("No hay una galaxia creada");
                         break;
                     }
@@ -193,11 +219,11 @@ public class Main {
                     System.out.println(respond);
 
                     break;
-                case 8:
-                    List<Planeta> listaPlanetas8 = serviciosGalaxia.getPlanetas(List.class);
-                    System.out.println(listaPlanetas8.toString());
+                case 10:
+                    List<Planeta> listaPlanetas10 = serviciosGalaxia.getPlanetas(ListaPlanetas.class).getPlanetas();
+                    System.out.println(listaPlanetas10.toString());
                     break;
-                case 9:
+                case 11:
                     System.out.println("¿Qué fichero quieres comprobar? (sin .xml)");
                     System.out.println("Un ejemplo preparado es galaxiaXSD o planetaXSD");
                     System.out.println("También puedes probar un ejemplo no válido llamado galaxiaMal");
@@ -218,7 +244,7 @@ public class Main {
                         System.out.println("No existe ese fichero");
                     }
                     break;
-                case 10:
+                case 12:
                     salir = true;
                     break;
             }
