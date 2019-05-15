@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Planeta>
+	<idPlaneta>6</idPlaneta>
     <nombre>Jupiter</nombre>
     <edad>15234</edad>
     <radio>2346.456</radio>
+	<linkPlaneta>http://localhost:8080/RestGalaxia/webresources/galaxia/planeta/6</linkPlaneta>
 </Planeta>

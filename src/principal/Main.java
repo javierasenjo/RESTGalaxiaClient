@@ -30,6 +30,9 @@ public class Main {
     static String nombrePlaneta;
     static int edadPlaneta;
     static double radioPlaneta;
+    static String token = "";
+    static boolean tokenValidado = false;
+    static boolean galaxiaExiste = false;
 
     /**
      * @param args the command line arguments
@@ -41,14 +44,15 @@ public class Main {
         while (!salir) {
             int inputNum = 0;
             String inputString, respuesta, respond;
-            System.out.println("---------------------------------------------------");
-            System.out.println("1. Registrarse      --------  2. Iniciar Sesión");
-            System.out.println("3. Crear galaxia    --------  8. Modificar planeta");
-            System.out.println("4. Obtener galaxia  --------  9. Mostrar galaxia");
-            System.out.println("5. Añadir planeta   --------  10. Devolver planetas");
-            System.out.println("6. Obtener planeta  --------  11. Validar XSD");
-            System.out.println("7. Borrar planeta   --------  12. Salir");
-            System.out.println("---------------------------------------------------");
+
+            System.out.println("-----------------------------------------------------------");
+            System.out.println("1. Registrarse             --------  2. Iniciar Sesión");
+            System.out.println("3. Crear galaxia           --------  8. Modificar planeta");
+            System.out.println("4. Obtener nombre galaxia  --------  9. Mostrar galaxia");
+            System.out.println("5. Añadir planeta          --------  10. Devolver planetas");
+            System.out.println("6. Obtener planeta         --------  11. Validar XSD");
+            System.out.println("7. Borrar planeta          --------  12. Salir");
+            System.out.println("-----------------------------------------------------------");
 
             Scanner sc = new Scanner(System.in);
             respuesta = sc.nextLine();
@@ -84,9 +88,18 @@ public class Main {
                     usuario2.setNombre(nombre2);
                     usuario2.setPassword(contraseña2);
                     respond = serviciosLogin.loginear(usuario2);
-                    System.out.println("Tu token es " + respond);
+                    if (respond.equals("")) {
+                        System.out.println("Ha habido un problema al iniciar sesión, por favor inténtelo de nuevo");
+                    } else {
+                        System.out.println("Tu token es " + respond);
+                        token = respond;
+                    }
                     break;
                 case 3:
+                    if (!comprobarToken()) {
+                        System.out.println("No has obtenido un token, por favor inicia sesión");
+                        break;
+                    }
                     String nombreGalaxia = null;
 
                     System.out.println("Escribe el nombre de la galaxia");
@@ -94,30 +107,48 @@ public class Main {
                     Galaxia galaxia = new Galaxia();
                     Galaxia galaxiaNueva = new Galaxia();
                     galaxia.setNombre(nombreGalaxia);
-                    galaxiaNueva = serviciosGalaxia.postGalaxia(galaxia, Galaxia.class);
-                    System.out.println(respuesta);
+                    galaxiaNueva = serviciosGalaxia.postGalaxia(galaxia, Galaxia.class, token);
+                    System.out.println(galaxiaNueva.toString());
                     break;
                 case 4:
-                    Galaxia galaxia4 = serviciosGalaxia.getGalaxia(Galaxia.class);
-                    if (galaxia4 == null) {
-                        System.out.println("No hay ninguna galaxia");
+                    if (!comprobarToken()) {
+                        System.out.println("No has obtenido un token, por favor inicia sesión");
+                        break;
+                    }
+                    Galaxia galaxia4 = serviciosGalaxia.getGalaxia(Galaxia.class, token);
+                    if (comprobarGalaxia(galaxia4) == false) {
+                        System.out.println("No hay una galaxia creada");
+                        break;
                     } else {
                         System.out.println("Te han devuelto la galaxia: " + galaxia4.getNombre());
                     }
                     break;
                 case 5:
-                    Galaxia galaxia5 = serviciosGalaxia.getGalaxia(Galaxia.class);
-                    if (galaxia5 == null) {
+                    if (!comprobarToken()) {
+                        System.out.println("No has obtenido un token, por favor inicia sesión");
+                        break;
+                    }
+                    Galaxia galaxia5 = serviciosGalaxia.getGalaxia(Galaxia.class, token);
+                    if (comprobarGalaxia(galaxia5) == false) {
                         System.out.println("No hay una galaxia creada");
                         break;
                     }
-                    Planeta planeta5 = crearPlaneta();
-                    Planeta planetaNuevo = serviciosGalaxia.postPlaneta(planeta5, Planeta.class);
-                    System.out.println(planetaNuevo);
+                    try {
+                        Planeta planeta5 = crearPlaneta();
+                        Planeta planetaNuevo = serviciosGalaxia.postPlaneta(planeta5, Planeta.class, token);
+                        System.out.println(planetaNuevo);
+                    } catch (Exception ex) {
+                        System.out.println("Los datos del planeta no tienen sentido");
+                    }
+
                     break;
                 case 6:
-                    Galaxia galaxia6 = serviciosGalaxia.getGalaxia(Galaxia.class);
-                    if (galaxia6 == null) {
+                    if (!comprobarToken()) {
+                        System.out.println("No has obtenido un token, por favor inicia sesión");
+                        break;
+                    }
+                    Galaxia galaxia6 = serviciosGalaxia.getGalaxia(Galaxia.class, token);
+                    if (comprobarGalaxia(galaxia6) == false) {
                         System.out.println("No hay una galaxia creada");
                         break;
                     }
@@ -127,9 +158,9 @@ public class Main {
                         break;
                     }
                     System.out.println("Estos son los planetas que tienes");
-                    respond = serviciosGalaxia.getPlanetasTexto();
+                    ListaPlanetas listPlanetas6 = (ListaPlanetas) serviciosGalaxia.getPlanetas(ListaPlanetas.class, token);
+                    System.out.println(listPlanetas6.toString());
                     System.out.println("Escribe el número del planeta");
-                    System.out.println(respond);
                     respuesta = sc.nextLine();
                     try {
                         inputNum = Integer.parseInt(respuesta);
@@ -138,7 +169,7 @@ public class Main {
                         break;
                     }
                     try {
-                        Planeta planeta2 = serviciosGalaxia.getPlaneta(Planeta.class, respuesta);
+                        Planeta planeta2 = serviciosGalaxia.getPlaneta(Planeta.class, respuesta, token);
                         System.out.println("Te han devuelto el planeta " + planeta2.getNombre());
                     } catch (Exception ex) {
                         System.out.println("Planeta no encontrado");
@@ -146,8 +177,12 @@ public class Main {
                     }
                     break;
                 case 7:
-                    Galaxia galaxia7 = serviciosGalaxia.getGalaxia(Galaxia.class);
-                    if (galaxia7 == null) {
+                    if (!comprobarToken()) {
+                        System.out.println("No has obtenido un token, por favor inicia sesión");
+                        break;
+                    }
+                    Galaxia galaxia7 = serviciosGalaxia.getGalaxia(Galaxia.class, token);
+                    if (comprobarGalaxia(galaxia7) == false) {
                         System.out.println("No hay una galaxia creada");
                         break;
                     }
@@ -157,9 +192,9 @@ public class Main {
                         break;
                     }
                     System.out.println("Estos son los planetas que tienes");
-                    respond = serviciosGalaxia.getPlanetasTexto();
+                    ListaPlanetas listPlanetas7 = (ListaPlanetas) serviciosGalaxia.getPlanetas(ListaPlanetas.class, token);
+                    System.out.println(listPlanetas7.toString());
                     System.out.println("Escribe el número del planeta");
-                    System.out.println(respond);
                     respuesta = sc.nextLine();
                     try {
                         inputNum = Integer.parseInt(respuesta);
@@ -168,7 +203,7 @@ public class Main {
                         break;
                     }
                     try {
-                       Galaxia GalaxiaNueva7 = serviciosGalaxia.deletePlaneta(Galaxia.class,respuesta);
+                        Galaxia GalaxiaNueva7 = serviciosGalaxia.deletePlaneta(Galaxia.class, respuesta, token);
                         System.out.println(GalaxiaNueva7);
                     } catch (Exception ex) {
                         System.out.println("Planeta no encontrado");
@@ -176,9 +211,13 @@ public class Main {
                     }
                     break;
                 case 8:
-                    Galaxia galaxia8 = serviciosGalaxia.getGalaxia(Galaxia.class);
+                    if (!comprobarToken()) {
+                        System.out.println("No has obtenido un token, por favor inicia sesión");
+                        break;
+                    }
+                    Galaxia galaxia8 = serviciosGalaxia.getGalaxia(Galaxia.class, token);
 
-                    if (galaxia8 == null) {
+                    if (comprobarGalaxia(galaxia8) == false) {
                         System.out.println("No hay una galaxia creada");
                         break;
                     }
@@ -188,9 +227,9 @@ public class Main {
                         break;
                     }
                     System.out.println("Estos son los planetas que tienes");
-                    respond = serviciosGalaxia.getPlanetasTexto();
+                    ListaPlanetas listPlanetas8 = (ListaPlanetas) serviciosGalaxia.getPlanetas(ListaPlanetas.class, token);
+                    System.out.println(listPlanetas8.toString());
                     System.out.println("Escribe el número del planeta que quieres cambiar");
-                    System.out.println(respond);
                     respuesta = sc.nextLine();
                     try {
                         inputNum = Integer.parseInt(respuesta);
@@ -201,8 +240,8 @@ public class Main {
 
                     try {
                         Planeta planeta = crearPlaneta();
-                        Planeta planetaNuevo8 = serviciosGalaxia.putPlaneta(planeta,Planeta.class, respuesta);
-                        System.out.println(respond);
+                        Planeta planetaNuevo8 = serviciosGalaxia.putPlaneta(planeta, Planeta.class, respuesta, token);
+                        System.out.println("Planeta " + planetaNuevo8.getNombre() + " modificado con éxito");
                     } catch (Exception ex) {
                         System.out.println("Planeta no encontrado");
                         break;
@@ -210,17 +249,30 @@ public class Main {
                     break;
 
                 case 9:
-                    Galaxia galaxia9 = serviciosGalaxia.getGalaxia(Galaxia.class);
-                    if (galaxia9 == null) {
+                    if (comprobarToken() == false) {
+                        System.out.println("No has obtenido un token, por favor inicia sesión");
+                        break;
+                    }
+                    Galaxia galaxia9 = serviciosGalaxia.getGalaxia(Galaxia.class, token);
+                    if (comprobarGalaxia(galaxia9) == false) {
                         System.out.println("No hay una galaxia creada");
                         break;
                     }
-                    respond = serviciosGalaxia.getPlanetasTexto();
+                    respond = serviciosGalaxia.getPlanetasTexto(token);
                     System.out.println(respond);
 
                     break;
                 case 10:
-                    List<Planeta> listaPlanetas10 = serviciosGalaxia.getPlanetas(ListaPlanetas.class).getPlanetas();
+                    if (!comprobarToken()) {
+                        System.out.println("No has obtenido un token, por favor inicia sesión");
+                        break;
+                    }
+                    Galaxia galaxia10 = serviciosGalaxia.getGalaxia(Galaxia.class, token);
+                    if (comprobarGalaxia(galaxia10) == false) {
+                        System.out.println("No hay una galaxia creada");
+                        break;
+                    }
+                    ListaPlanetas listaPlanetas10 = (ListaPlanetas) serviciosGalaxia.getPlanetas(ListaPlanetas.class, token);
                     System.out.println(listaPlanetas10.toString());
                     break;
                 case 11:
@@ -269,6 +321,9 @@ public class Main {
         } catch (Exception ex) {
             System.out.println("Escribe un número");
         }
+        if (nombrePlaneta == "" || edadPlaneta == 0 || radioPlaneta == 0) {
+            return null;
+        }
         Planeta planeta = new Planeta();
         planeta.setNombre(nombrePlaneta);
         planeta.setEdad(edadPlaneta);
@@ -276,4 +331,21 @@ public class Main {
         return planeta;
     }
 
+    private static boolean comprobarToken() {
+        if (token.toString().equals("")) {
+            tokenValidado = false;
+        } else {
+            tokenValidado = true;
+        }
+        return tokenValidado;
+    }
+
+    private static boolean comprobarGalaxia(Galaxia galaxia) {
+        if (galaxia.getNombre().equals("")) {
+            galaxiaExiste = false;
+        } else {
+            galaxiaExiste = true;
+        }
+        return galaxiaExiste;
+    }
 }

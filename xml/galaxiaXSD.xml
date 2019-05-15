@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 <Galaxia>
-    <nombre>Vía Lactea</nombre>
+    <nombre>Via Láctea
+    </nombre>
     <Planetas>
         <Planeta>
-            <nombre>Tierra</nombre>
+            <idPlaneta>6</idPlaneta>
+            <nombre>tierra</nombre>
             <edad>4543</edad>
             <radio>6371.0</radio>
+            <linkPlaneta>http://localhost:8080/RestGalaxia/webresources/galaxia/planeta/6</linkPlaneta>
         </Planeta>
         <Planeta>
-            <nombre>Marte</nombre>
-            <edad>4603</edad>
-            <radio>3390.0</radio>
+            <idPlaneta>7</idPlaneta>
+            <nombre>adio2s</nombre>
+            <edad>1</edad>
+            <radio>1.5</radio>
+            <linkPlaneta>http://localhost:8080/RestGalaxia/webresources/galaxia/3/planeta/7</linkPlaneta>
         </Planeta>
         <Planeta>
-            <nombre>Jupiter</nombre>
-            <edad>4325</edad>
-            <radio>26543.35</radio>
+            <idPlaneta>11</idPlaneta>
+            <nombre>jmodif</nombre>
+            <edad>2</edad>
+            <radio>3.0</radio>
+            <linkPlaneta>http://localhost:8080/RestGalaxia/webresources/galaxia/planeta/11</linkPlaneta>
         </Planeta>
     </Planetas>
+    <linkGalaxia>http://localhost:8080/RestGalaxia/webresources/galaxia/3</linkGalaxia>
+    <idGalaxia>3</idGalaxia>
 </Galaxia>

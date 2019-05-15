@@ -7,7 +7,9 @@ package RestServices;
 
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.HttpHeaders;
 
 /**
  * Jersey REST client generated for REST resource:ServiciosGalaxia [galaxia]<br>
@@ -32,47 +34,53 @@ public class ServiciosGalaxia {
         webTarget = client.target(BASE_URI).path("galaxia");
     }
 
-    public <T> T getPlanetas(Class<T> responseType) throws ClientErrorException {
+    public <T> T getPlanetas(Class<T> responseType, String token) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("planeta");
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, token).get(responseType);
     }
 
-    public <T> T putPlaneta(Object requestEntity, Class<T> responseType, String numPlaneta) throws ClientErrorException {
-        return webTarget.path(java.text.MessageFormat.format("planeta/{0}", new Object[]{numPlaneta})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
+    public <T> T putPlaneta(Object requestEntity, Class<T> responseType, String numPlaneta, String token) throws ClientErrorException {
+        return webTarget.path(java.text.MessageFormat.format("planeta/{0}", new Object[]{numPlaneta})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, token).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
     }
 
-    public <T> T deletePlaneta(Class<T> responseType, String numPlaneta) throws ClientErrorException {
-        return webTarget.path(java.text.MessageFormat.format("planeta/{0}", new Object[]{numPlaneta})).request().delete(responseType);
+    public <T> T deletePlaneta(Class<T> responseType, String numPlaneta, String token) throws ClientErrorException {
+        return webTarget.path(java.text.MessageFormat.format("planeta/{0}", new Object[]{numPlaneta})).request().header(HttpHeaders.AUTHORIZATION, token).delete(responseType);
     }
 
-    public <T> T postGalaxia(Object requestEntity, Class<T> responseType) throws ClientErrorException {
-        return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
+    public <T> T postGalaxia(Object requestEntity, Class<T> responseType, String token) throws ClientErrorException {
+//        Invocation.Builder header = webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, token);
+//        System.out.println("El token es "+ token);
+//        Invocation buildPost = header.buildPost(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+//        T invoke = buildPost.invoke(responseType);
+        return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, token).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
+
+//        return invoke;
     }
 
-    public <T> T postPlaneta(Object requestEntity, Class<T> responseType) throws ClientErrorException {
-        return webTarget.path("planeta").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
+    public <T> T postPlaneta(Object requestEntity, Class<T> responseType, String token) throws ClientErrorException {
+        return webTarget.path("planeta").request(javax.ws.rs.core.MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, token).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
     }
 
-    public String getPlanetasTexto() throws ClientErrorException {
+    public String getPlanetasTexto(String token) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("planeta/texto");
-        return resource.request(javax.ws.rs.core.MediaType.TEXT_PLAIN).get(String.class);
+        return resource.request(javax.ws.rs.core.MediaType.TEXT_PLAIN).header(HttpHeaders.AUTHORIZATION, token).get(String.class);
     }
 
-    public <T> T getGalaxia(Class<T> responseType) throws ClientErrorException {
+    public <T> T getGalaxia(Class<T> responseType, String token) throws ClientErrorException {
         WebTarget resource = webTarget;
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, token).get(responseType);
     }
 
-    public <T> T getPlaneta(Class<T> responseType, String numPlaneta) throws ClientErrorException {
+    public <T> T getPlaneta(Class<T> responseType, String numPlaneta, String token) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("planeta/{0}", new Object[]{numPlaneta}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, token).get(responseType);
     }
 
     public void close() {
         client.close();
     }
-    
+
 }

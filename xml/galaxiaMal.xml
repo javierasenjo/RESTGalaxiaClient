@@ -1,12 +1,31 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE Galaxia SYSTEM "Galaxia.dtd">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<Galaxia>
+    <nombre>Via Láctea
+    </nombre>
+    <Planetas>
         <Planeta>
-            <nombre>c3po</nombre>
-            <edad>24</edad>
-            <radio>235.0</radio>
+            <idPlaneta>6</idPlaneta>
+            <nombre>tierra</nombre>
+            <edad>4543</edad>
+            <radio>6371.0</radio>
+            <linkPlaneta>http://localhost:8080/RestGalaxia/webresources/galaxia/planeta/6</linkPlaneta>
         </Planeta>
-		        <Planeta>
-            <nombre>c3po</nombre>
-            <edad>24</edad>
-            <radio>235.0</radio>
+        <Planeta>
+            <idPlaneta>7</idPlaneta>
+            <nombre>adio2s</nombre>
+            <edad>1</edad>
+            <radi5o>1.5</radi5o>
+            <linkPlaneta>http://localhost:8080/RestGalaxia/webresources/galaxia/3/planeta/7</linkPlaneta>
         </Planeta>
+        <Planeta>
+            <idPlaneta>11</idPlaneta>
+            <nombre>jmodif</nombre>
+            <edad>2</edad>
+          
+            <linkPlaneta>http://localhost:8080/RestGalaxia/webresources/galaxia/planeta/11</linkPlaneta>
+        </Planeta>
+    </Planetas>
+    <linkGalaxia>http://localhost:8080/RestGalaxia/webresources/galaxia/3</linkGalaxia>
+    <idGalaxia>3</idGalaxia>
+</Galaxia>
