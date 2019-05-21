@@ -11,6 +11,7 @@ import Pojo.Planeta;
 import Pojo.Usuario;
 import RestServices.ServiciosGalaxia;
 import RestServices.ServiciosLogin;
+import RestServices.ServiciosLogout;
 import RestServices.ServiciosValidador;
 import RestServices.ServiciosRegistrarse;
 import java.io.BufferedReader;
@@ -46,12 +47,13 @@ public class Main {
             String inputString, respuesta, respond;
 
             System.out.println("-----------------------------------------------------------");
-            System.out.println("1. Registrarse             --------  2. Iniciar Sesión");
-            System.out.println("3. Crear galaxia           --------  8. Modificar planeta");
-            System.out.println("4. Obtener nombre galaxia  --------  9. Mostrar galaxia");
-            System.out.println("5. Añadir planeta          --------  10. Devolver planetas");
-            System.out.println("6. Obtener planeta         --------  11. Validar XSD");
-            System.out.println("7. Borrar planeta          --------  12. Salir");
+            System.out.println("1. Registrarse              --------  7.  Borrar planeta");
+            System.out.println("2. Iniciar Sesión           --------  8.  Modificar planeta");
+            System.out.println("3. Crear galaxia            --------  9.  Mostrar galaxia");
+            System.out.println("4. Obtener nombre galaxia   --------  10. Devolver planetas");
+            System.out.println("5. Añadir planeta           --------  11. Validar XSD");
+            System.out.println("6. Obtener planeta          --------  12. Cerrar sesión");
+            System.out.println("------------------------ 13. Salir ------------------------");
             System.out.println("-----------------------------------------------------------");
 
             Scanner sc = new Scanner(System.in);
@@ -61,6 +63,7 @@ public class Main {
             ServiciosValidador serviciosValidador = new ServiciosValidador();
             ServiciosRegistrarse serviciosRegistrarse = new ServiciosRegistrarse();
             ServiciosLogin serviciosLogin = new ServiciosLogin();
+            ServiciosLogout serviciosLogout = new ServiciosLogout();
             try {
                 inputNum = Integer.parseInt(respuesta);
             } catch (Exception ex) {
@@ -100,6 +103,11 @@ public class Main {
                         System.out.println("No has obtenido un token, por favor inicia sesión");
                         break;
                     }
+                    Galaxia galaxia3 = serviciosGalaxia.getGalaxia(Galaxia.class, token);
+//                    if (galaxia3 != null) {
+//                        System.out.println("Ya yienes una galaxia creada");
+//                        break;
+//                    }
                     String nombreGalaxia = null;
 
                     System.out.println("Escribe el nombre de la galaxia");
@@ -297,6 +305,20 @@ public class Main {
                     }
                     break;
                 case 12:
+                    if (!comprobarToken()) {
+                        System.out.println("No has obtenido un token, por favor inicia sesión");
+                        break;
+                    }
+                    Galaxia galaxia12 = serviciosGalaxia.getGalaxia(Galaxia.class, token);
+                    if (comprobarGalaxia(galaxia12) == false) {
+                        System.out.println("No hay una galaxia creada");
+                        break;
+                    }
+                    respuesta = serviciosLogout.cerrarSesion(token);
+                    token = "";
+                    System.out.println(respuesta);
+                    break;
+                case 13:
                     salir = true;
                     break;
             }
